@@ -3,8 +3,8 @@ import dataclasses
 from flask import request
 
 from webapp import app
-from webapp.data import users
-from webapp.model import User
+from webapp.core.data import users
+from webapp.core.model import User
 
 
 @app.get("/user/<id>")

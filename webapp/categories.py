@@ -3,8 +3,8 @@ import dataclasses
 from flask import request
 
 from webapp import app
-from webapp.data import categories
-from webapp.model import Category
+from webapp.core.data import categories
+from webapp.core.model import Category
 
 
 @app.get("/category/<id>")

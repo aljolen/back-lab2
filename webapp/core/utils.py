@@ -1,7 +1,7 @@
 import datetime
 import random
 
-from webapp.model import User, Category, Record
+from webapp.core.model import User, Category, Record
 
 
 def generate_users(names):

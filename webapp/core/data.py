@@ -1,4 +1,4 @@
-from webapp.utils import generate_users, generate_categories, generate_records
+from webapp.core.utils import generate_users, generate_categories, generate_records
 
 users = dict(generate_users(["Alpha", "Beta", "Gamma", "Delta"]))
 categories = dict(generate_categories(["Tech", "Clothes", "Laptops"]))

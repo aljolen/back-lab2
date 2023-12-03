@@ -4,8 +4,8 @@ import datetime
 from flask import request
 
 from webapp import app
-from webapp.data import records
-from webapp.model import Record
+from webapp.core.data import records
+from webapp.core.model import Record
 
 
 @app.get("/record/<id>")
