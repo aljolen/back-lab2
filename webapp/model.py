@@ -19,6 +19,6 @@ class Category:
 class Record:
     user_id: str
     category_id: str
-    created: datetime.datetime
+    created: str
     sum: int
     id: str = field(default_factory=lambda: uuid.uuid4().hex)

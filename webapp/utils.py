@@ -31,5 +31,5 @@ def generate_record(category: Category, user: User):
                                 random.randint(0, 23),
                                 random.randint(0, 59),
                                 0)
-    record = Record(user.id, category.id, created=created, sum=sum)
+    record = Record(user.id, category.id, created=str(created), sum=sum)
     return record
