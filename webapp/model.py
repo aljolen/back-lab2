@@ -17,7 +17,6 @@ class Category:
 
 @dataclass
 class Record:
-    name: str
     user_id: str
     category_id: str
     created: datetime.datetime
