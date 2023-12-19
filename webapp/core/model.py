@@ -1,25 +1,24 @@
-import datetime
-import uuid
-from dataclasses import dataclass, field
+from sqlalchemy import func
+
+from webapp import db
 
 
-@dataclass
-class User:
-    name: str
-    id: str = field(default_factory=lambda: uuid.uuid4().hex)
+class UserModel(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), unique=False, nullable=False)
 
 
-@dataclass
-class Category:
-    name: str
-    owner_id: str = field(default=None)
-    id: str = field(default_factory=lambda: uuid.uuid4().hex)
+class CategoryModel(db.Model):
+    __tablename__ = "categories"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), unique=False, nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"), unique=False, nullable=True)
 
-
-@dataclass
-class Record:
-    user_id: str
-    category_id: str
-    sum: int
-    created: datetime.datetime = field(default_factory=datetime.datetime.now)
-    id: str = field(default_factory=lambda: uuid.uuid4().hex)
+class RecordModel(db.Model):
+    __tablename__ = "records"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), unique=False, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"), unique=False, nullable=False)
+    created = db.Column(db.TIMESTAMP, server_default=func.now())
+    sum = db.Column(db.Integer, unique=False, nullable=False)

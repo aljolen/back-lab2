@@ -12,5 +12,6 @@ services:
  db:
   image: postgres:15.4-alpine3.18
   environment:
-    POSTGRES_PASSWORD: 123456
-    POSTGRES_DB: db
+    POSTGRES_PASSWORD: "123456"
+  ports:
+    - "5432:5432"
