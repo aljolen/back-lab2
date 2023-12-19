@@ -9,3 +9,8 @@ services:
      PORT: 80
    ports:
      - "8080:80"
+ db:
+  image: postgres:15.4-alpine3.18
+  environment:
+    POSTGRES_PASSWORD: 123456
+    POSTGRES_DB: db
