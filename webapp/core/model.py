@@ -12,6 +12,7 @@ class User:
 @dataclass
 class Category:
     name: str
+    owner_id: str = field(default=None)
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
 
@@ -19,6 +20,6 @@ class Category:
 class Record:
     user_id: str
     category_id: str
-    created: str
     sum: int
+    created: datetime.datetime = field(default_factory=datetime.datetime.now)
     id: str = field(default_factory=lambda: uuid.uuid4().hex)

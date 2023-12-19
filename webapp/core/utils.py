@@ -16,10 +16,17 @@ def generate_categories(categories):
         yield new_category.id, new_category
 
 
+def generate_user_categories(users, categories):
+    for category in list(categories):
+        user = random.choice(list(users))
+        new_category = Category(category, owner_id=user.id)
+        yield new_category.id, new_category
+
+
 def generate_records(users, categories):
     for user in list(users):
         for category in list(categories):
-            # if random.choice([True, False]): continue  # generate or not generate randomly for each user and category
+            if random.choice([True, False]): continue  # generate or not generate randomly for each user and category
             record = generate_record(category, user)
             yield record.id, record
 
@@ -31,5 +38,5 @@ def generate_record(category: Category, user: User):
                                 random.randint(0, 23),
                                 random.randint(0, 59),
                                 0)
-    record = Record(user.id, category.id, created=str(created), sum=sum)
+    record = Record(user.id, category.id, created=created, sum=sum)
     return record
