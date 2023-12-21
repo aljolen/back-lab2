@@ -11,6 +11,7 @@ services:
      DB_PASSWORD: "123456"
      DB_HOST: "db:5432"
      DB_NAME: "postgres"
+     JWT_SECRET_KEY: 232331668078869261211716619718782237495
    ports:
      - "8080:80"
    depends_on:

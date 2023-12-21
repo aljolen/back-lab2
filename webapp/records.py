@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
 
@@ -10,6 +11,7 @@ record_schema = RecordSchema()
 
 
 @app.get("/record/<int:id>")
+@jwt_required()
 def get_record(id):
     user = RecordModel.query.get(id)
     if not user: return {"message": f"Record with this id does not exist: <{id}>"}, 404
@@ -17,6 +19,7 @@ def get_record(id):
 
 
 @app.delete("/record/<int:id>")
+@jwt_required()
 def delete_record(id):
     record = RecordModel.query.get(id)
     if not record: return {"message": f"Record with this id does not exist: <{id}>"}, 404
@@ -26,6 +29,7 @@ def delete_record(id):
 
 
 @app.get("/records")
+@jwt_required()
 def get_records():
     user_id = request.args.get("user_id")
     category_id = request.args.get("category_id")
@@ -45,6 +49,7 @@ def get_records():
 
 
 @app.post("/record")
+@jwt_required()
 def create_record():
     record_data = request.get_json()
     if not record_data: return {"message": "No input data provided"}, 404

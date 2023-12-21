@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
 
@@ -10,6 +11,7 @@ category_schema = CategorySchema()
 
 
 @app.get("/category/<int:id>")
+@jwt_required()
 def get_category(id):
     category = CategoryModel.query.get(id)
     if not category: return {"message": f"Category with this id does not exist: <{id}>"}, 404
@@ -17,6 +19,7 @@ def get_category(id):
 
 
 @app.delete("/category/<int:id>")
+@jwt_required()
 def delete_category(id):
     category = CategoryModel.query.get(id)
     if not category: return {"message": f"Category with this id does not exist: <{id}>"}, 404
@@ -26,6 +29,7 @@ def delete_category(id):
 
 
 @app.post("/category")
+@jwt_required()
 def create_category():
     category_data = request.get_json()
     if not category_data: return {"message": "No input data provided"}, 404
