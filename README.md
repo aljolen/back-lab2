@@ -1,22 +1,24 @@
-# back-lab2
+# back-lab3
+Варіант 2 (= 1301 mod 3)
 
 ## Installation and starting of the service
 
     docker compose up
 
-The web service will be available under http://localhost:8080
+The web service will be available under http://localhost:8080 <br>
+The postgres server will be available under `postgresql://postgres:<password>@localhost:5432/postgres` <br>
 
-## Deployed instance 
 
-A deployed instance of this web service is available under https://back-lab2.onrender.com
+DB user, password, name and host can be configured in `docker-compose.yaml`
+
+## Deployed instance
+A deployed instance of this web service is available under https://back-lab3.onrender.com
 
 
 ## Postman collection
-The Postman collection of all API requests is under `postman/Lab 2.postman_collection.json`
+The Postman collection of all API requests is under `postman/Lab 3.postman_collection.json`
+link: https://www.postman.com/joint-operations-operator-59334073/workspace/my-workspace/overview
 
 ## Postman flow
-link: https://api.postman.com/collections/31560878-f3715aa9-5534-4f52-802c-f50e384ae78b?access_key=PMAT-01HH0NQ0PDHF28QJTT2YXN0Z0D
-A postman flow was created to test the API
-![img.png](postman/img.png)
-![img2.png](postman/img2.png)
-![img3.png](postman/img3.png)
+To test the API, a corresponding postman flow was created
+link: https://www.postman.com/joint-operations-operator-59334073/workspace/my-workspace/overview
