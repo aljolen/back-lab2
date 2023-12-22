@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
 
@@ -15,6 +15,7 @@ category_schema = CategorySchema()
 def get_category(id):
     category = CategoryModel.query.get(id)
     if not category: return {"message": f"Category with this id does not exist: <{id}>"}, 404
+    if category.owner_id and category.owner_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
     return category_schema.dump(category)
 
 
@@ -23,6 +24,7 @@ def get_category(id):
 def delete_category(id):
     category = CategoryModel.query.get(id)
     if not category: return {"message": f"Category with this id does not exist: <{id}>"}, 404
+    if category.owner_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
     db.session.delete(category)
     db.session.commit()
     return category_schema.dump(category)
@@ -38,6 +40,7 @@ def create_category():
     except ValidationError as err:
         return err.messages, 422
 
+    if category.owner_id and category.owner_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
     try:
         db.session.add(category)
         db.session.commit()
@@ -48,9 +51,12 @@ def create_category():
 
 
 @app.get("/categories")
+@jwt_required()
 def get_categories():
     owner_id = request.args.get("owner_id")
     if owner_id and not owner_id.isnumeric(): return {"message": "Invalid id"}, 404
+    if owner_id and owner_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
+
     common_and_user_defined = (CategoryModel
                                .query
                                .filter((CategoryModel.owner_id == owner_id)

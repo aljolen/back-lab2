@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +14,7 @@ user_schema = UserSchema()
 @app.get("/user/<int:id>")
 @jwt_required()
 def get_user(id):
+    if id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
     user = UserModel.query.get(id)
     if not user: return {"message": f"User with this id does not exist: <{id}>"}, 404
     return user_schema.dump(user)
@@ -22,6 +23,7 @@ def get_user(id):
 @app.delete("/user/<int:id>")
 @jwt_required()
 def delete_user(id):
+    if id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
     user = UserModel.query.get(id)
     if not user: return {"message": f"User with this id does not exist: <{id}>"}, 404
     db.session.delete(user)

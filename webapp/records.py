@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
 
@@ -13,9 +13,10 @@ record_schema = RecordSchema()
 @app.get("/record/<int:id>")
 @jwt_required()
 def get_record(id):
-    user = RecordModel.query.get(id)
-    if not user: return {"message": f"Record with this id does not exist: <{id}>"}, 404
-    return record_schema.dump(user)
+    record = RecordModel.query.get(id)
+    if not record: return {"message": f"Record with this id does not exist: <{id}>"}, 404
+    if record.user_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
+    return record_schema.dump(record)
 
 
 @app.delete("/record/<int:id>")
@@ -23,6 +24,7 @@ def get_record(id):
 def delete_record(id):
     record = RecordModel.query.get(id)
     if not record: return {"message": f"Record with this id does not exist: <{id}>"}, 404
+    if record.user_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
     db.session.delete(record)
     db.session.commit()
     return record_schema.dump(record)
@@ -39,6 +41,7 @@ def get_records():
     if (user_id and not user_id.isnumeric()) or (category_id and not category_id.isnumeric()):
         return {
             "message": "Both parameters must be integers"}, 404
+    if user_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
 
     records = RecordModel.query
     if category_id:
@@ -57,6 +60,8 @@ def create_record():
         record = record_schema.load(record_data, session=db.session)
     except ValidationError as err:
         return err.messages, 422
+
+    if record.user_id != get_jwt_identity(): return {"message": f"Not allowed"}, 401
 
     category = CategoryModel.query.get(record.category_id)
     if not category: return {"message": f"Category with id {record.category_id} does not exist"}, 404
